@@ -1,0 +1,136 @@
+int gcd(int x,int y)//gcd
+{
+	return y ? gcd(y, x % y) : x;
+}
+
+
+int lcm(int x,int y)//lcm
+{
+	return (x*y)/gcd(x,y);
+}
+
+
+void exgcd(int a,int b,int &x,int &y)//exgcd   a*b + b*y = 1 => a*x = 1 mod b
+{
+	if(b==0)
+	{
+		x=1;
+		y=0;
+	}
+	else 
+	{
+		exgcd(b,a%b,y,x);
+		y=y-a/b*x;
+	}
+}//x = (x % p + p) % p; x是a在mod b下的逆元
+
+
+int phi(ll x)//求欧拉函数，朴素算法
+{
+	int sum=x,q=sqrt(x);
+	for(int i=2;i<=p;i++)
+    {
+		if(x%i==0)
+        {
+			sum=sum/i*(i-1);
+			while(x%i==0) x/=i;	
+		}
+	}
+	if(x>1) sum=sum/x*(x-1);
+	return sum;
+}
+
+
+int sieve(int n)//埃式筛，求 1 ~ n 内素数个数
+{   
+    memset(isp,true,sizeof(isp));
+    int p=0;
+    isp[0]=isp[1]=false;
+    for(int i=2;i<=n;i++)
+    {
+        if(isp[i])
+        {   
+            prime[p]=i;
+            p++;
+            for(int j=2*i;j<=n;j+=i)
+            {
+                isp[j]=false;
+			}
+        }
+    }
+    return p;
+}
+
+
+void Prime()//欧拉筛
+{
+    memset(vis,0,sizeof(vis));
+    memset(prime,0,sizeof(prime));
+    for (int i = 2;i <= maxn; i++) 
+	{
+        if (vis[i]==0) 
+		{
+			prime[0]++;
+            prime[prime[0]] = i;
+        }
+        for(int j = 1; j <=prime[0] && i*prime[j] <= maxn; j++) 
+		{
+            visit[i*prime[j]] = 1;
+            if (i % prime[j] == 0) 
+			{
+                break;
+            }
+        }
+    }
+}
+
+
+void C()
+{
+	for(int i=0;i<N;i++)//求组合数 1 
+    {
+        for(int j=0;j<=i;j++)
+	    {
+            if(j==0)c[i][j]=1;
+            else c[i][j]=(c[i-1][j]+c[i-1][j-1])%mod;
+        }
+    }
+}
+
+
+int q_pow(int x,int y,int md)// (x^y) % md
+{
+    int res = 1;
+    while(y>0)
+	{
+        if(y & 1) res = (res * x) % md;
+        y >>= 1;
+        x = (x * x) % md;
+    }
+    return res;
+}
+
+
+int check(int x)//判断素数
+{
+	for(int i=2;i<=sqrt(x);i++)
+	{
+		if(x%i==0)return 0;
+	}
+	return 1;
+}
+
+
+int q_mul(int x,int y,int md)// (x*y) % md
+{
+    int res = 0;
+    while(y>0)
+	{
+        if(y & 1) res = (res + x) % md;
+        y >>= 1;
+        x = (x + x) % md;
+    }
+    return res;
+}
+
+
