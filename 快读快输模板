@@ -1,4 +1,4 @@
-inline int read()
+inline int read()//快读
 {
     register int x=0,f=1;
 	char ch=getchar();
@@ -13,4 +13,14 @@ inline int read()
 		ch=getchar();
 	}
     return x*f;
+}
+
+void write(int x)//快输
+{
+    if(x<0)
+        putchar('-'),x=-x;
+    if(x>9)
+        write(x/10);
+    putchar(x%10+'0');
+    return;
 }
