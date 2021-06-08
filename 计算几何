@@ -1,0 +1,155 @@
+#include <bits/stdc++.h>
+using namespace std;
+const double eps = 1e-9, pi = 3.14159265358979323846;
+
+bool equ(double X, double Y)
+{
+	if(fabs(X - Y) < eps) return 1;
+	else return 0;
+}
+
+
+int sign(double x)
+{
+    if(fabs(x) <= eps) return 0;
+    else if(x > 0) return 1;
+    return -1;
+
+
+struct Point // 手写 point 类 
+{
+    double x,y;
+    Point(){}
+    Point(double _x, double _y){ x = _x, y = _y; }
+    Point operator + (Point P) { return Point(x + P.x, y + P.y); }
+    Point operator - (Point P) { return Point(x - P.x, y - P.y); }
+    Point operator * (double K) { return Point(K * x, K * y); }
+    Point operator / (double K) { return Point(x / K, y / K); }
+    bool operator < (Point Q) { return x < Q.x || (x == Q.x && y < Q.y); }
+	bool operator > (Point Q) { return x > Q.x || (x == Q.x && y > Q.y); }
+	bool operator == (Point Q) { return equ(x, Q.x) && equ(y, Q.y); }
+    double norm() { return x * x + y * y; };
+    double abs(){return sqrt(norm());}
+    double dot(Point a, Point b){ return a.x * b.x + a.y * b.y; }
+    void read(){ scanf("%lf%lf", &x, &y); }
+    void print(char ch = '\n') const { printf("%.10lf %.10lf", x, y), putchar(ch); }
+};
+
+typedef Point Vector;
+
+double dot(Vector a, Vector b)//点积 
+{
+    return a.x * b.x + a.y * b.y;
+}
+
+
+double cross(Vector a, Vector b)//叉积 
+{
+     return a.x * b.y - a.y * b.x;
+}
+
+bool parallel(Vector a, Vector b)//判断是否平行 
+{
+	if(fabs(cross(a, b) - 0.0) <= eps) return 1;
+	else return 0;
+}
+
+bool orthogonal(Vector a, Vector b)//判断是否正交 
+{
+	if(fabs(dot(a, b) - 0.0) <= eps) return 1;
+	else return 0;
+}
+
+
+int ccw(Point a, Point b, Point c)
+{
+    Vector s1 = b - a, s2 = c - a;
+    if(sign(cross(s1, s2)) == -1) return -1;
+    else if(sign(cross(s1, s2)) == 1) return 1;
+    else if(sign(dot(s1, s2)) == -1) return -1;
+    else if(sign((c - a).abs() - (b - a).abs()) == 1) return 1;
+    else return 0;
+}
+bool intersection()
+{
+    if(ccw(p0, p1, p2) * ccw(p0, p1, p3) <= 0 && ccw(p2, p3, p0) * ccw(p2, p3, p1) <= 0) return true;
+    return false;
+}
+
+Point p1, p2;
+
+void Aizu_CGL_1_A()//求点在直线上的投影点 
+{
+    int T;
+	p1.read(); p2.read();//两点确定一条直线， n1,m1, n2, m2 为直线上两点坐标
+	cin >> T;
+	while(T--)
+	{
+		Point p;
+		p.read();
+		double k1 = dot(p2 - p1, p - p1);
+        double k2 = (p2 - p1).abs();
+        k1 /= k2;
+        Point ans = (p2 - p1) * (k1 / k2);
+        printf("%.10f %.10f\n",ans.x + p1.x,ans.y+p1.y);	
+	}
+} 
+
+void Aizu_CGL_1_B()//求点在直线上的对称点 
+{
+	
+	int T;
+	p1.read(); p2.read();//两点确定一条直线， n1,m1, n2, m2 为直线上两点坐标
+	cin >> T;
+	while(T--)
+	{
+		Point p;
+		p.read();
+		double k1 = dot(p2 - p1, p - p1);
+        double k2 = (p2 - p1).abs();
+        k1 /= k2;
+        Point len = (p2 - p1) * (k1 / k2);
+        Point mid = p1 + len;
+        double x = 2 * mid.x - p.x, y = 2 * mid.y - p.y;
+        printf("%.10f %.10f\n	",x, y);	
+	}
+}
+
+void Aizu_CGL_1_C()
+{
+	int T;
+	p1.read(); p2.read();//两点确定一条直线， n1,m1, n2, m2 为直线上两点坐标
+	cin >> T;
+	while(T--)
+	{
+		Point p;
+		p.read();
+		if(cross(p2 - p1, p - p1) > 0) printf("COUNTER_CLOCKWISE\n");
+        else if(cross(p2 - p1, p - p1) < 0) printf("CLOCKWISE\n");
+        else if(dot(p2 - p1, p - p1) < 0) printf("ONLINE_BACK\n");
+        else if(((p - p1).abs() - (p2 - p1).abs()) > 0) printf("ONLINE_FRONT\n");
+        else printf("ON_SEGMENT\n");
+	}
+}
+
+void Aizu_CGL_2_A()
+{
+	int T;
+	cin >> T;
+	while(T--)
+	{
+		Point p1, p2, p3, p4;
+		p1.read(); p2.read(); p3.read(); p4.read();
+		if(parallel(p2 - p1, p4 - p3)) printf("2\n");
+        else if(orthogonal(p2 - p1, p4 - p3)) printf("1\n");
+        else printf("0\n");		
+	}	
+} 
+
+
+
+int main()
+{
+	Aizu_CGL_2_A();
+	return 0;
+}
