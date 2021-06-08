@@ -39,13 +39,13 @@ typedef Point Vector;
 
 double dot(Vector a, Vector b)//点积 
 {
-    return a.x * b.x + a.y * b.y;
+    return a.x * b.x + a.y * b.y; // a * b > 0 :方向基本相同，夹角在0°到90°之间 , a * b == 0 正交，相互垂直  ,  a ·b<0    方向基本相反，夹角在90°到180°之间 
 }
 
 
 double cross(Vector a, Vector b)//叉积 
 {
-     return a.x * b.y - a.y * b.x;
+     return a.x * b.y - a.y * b.x;// a * b == 0 :两向量共线， a * b > 0 : b 在 a 左侧， < 0 ： b 在 a 右侧  
 }
 
 bool parallel(Vector a, Vector b)//判断是否平行 
